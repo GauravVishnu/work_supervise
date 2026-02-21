@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-
-const API_URL = "http://10.162.111.227:3001";
+import { API_URL } from './config';
 
 export default function Register() {
   const router = useRouter();

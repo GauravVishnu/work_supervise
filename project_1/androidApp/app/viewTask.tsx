@@ -4,8 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Slider from "@react-native-community/slider";
-
-const API_URL = "http://10.162.111.227:3001";
+import { API_URL } from './config';
 
 export default function ViewTask() {
   const router = useRouter();
