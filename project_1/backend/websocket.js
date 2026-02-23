@@ -56,20 +56,13 @@ module.exports = (io) => {
 
         const msg = result.rows[0];
 
-        // Send to receiver if online
+        // Send to receiver if online (but don't mark as delivered yet)
         const receiverSocketId = userSockets.get(parseInt(receiverId));
         if (receiverSocketId) {
           io.to(receiverSocketId).emit('new_message', msg);
-          
-          // Update status to delivered
-          await pool.query(
-            'UPDATE messages SET status = $1 WHERE message_id = $2',
-            ['delivered', msg.message_id]
-          );
-          msg.status = 'delivered';
         }
 
-        // Send back to sender with updated status
+        // Send back to sender (status stays 'sent')
         socket.emit('message_sent', msg);
 
       } catch (err) {

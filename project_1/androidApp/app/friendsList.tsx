@@ -68,7 +68,7 @@ export default function FriendsList() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#1e293b' },
-  header: { flexDirection: 'row', alignItems: 'center', padding: 20, paddingTop: 60 },
+  header: { flexDirection: 'row', alignItems: 'center', padding: 16, paddingTop: 40 },
   backBtn: { marginRight: 15, padding: 8 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
   card: { backgroundColor: '#334155', padding: 12, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#475569', marginHorizontal: 20, marginBottom: 8, borderRadius: 8 },

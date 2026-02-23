@@ -95,7 +95,7 @@ export default function Conversations() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0f172a' },
-  header: { flexDirection: 'row', alignItems: 'center', padding: 16, backgroundColor: '#1e293b', borderBottomWidth: 1, borderBottomColor: '#334155' },
+  header: { flexDirection: 'row', alignItems: 'center', padding: 16, paddingTop: 40, backgroundColor: '#1e293b', borderBottomWidth: 1, borderBottomColor: '#334155' },
   backButton: { fontSize: 28, color: '#60a5fa', marginRight: 16 },
   headerTitle: { fontSize: 20, fontWeight: 'bold', color: '#fff' },
   friendItem: { flexDirection: 'row', padding: 12, borderBottomWidth: 1, borderBottomColor: '#1e293b' },
