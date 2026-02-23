@@ -181,7 +181,10 @@ export default function ViewTask() {
         <Ionicons name="arrow-back" size={24} color="#60a5fa" />
       </TouchableOpacity>
 
-      <Text style={styles.title}>My Tasks</Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>My Tasks</Text>
+        <Text style={styles.date}>{new Date().toLocaleDateString()}</Text>
+      </View>
 
       <ScrollView 
         style={styles.taskList}
@@ -269,18 +272,18 @@ export default function ViewTask() {
               <Text style={styles.visibilityLabel}>Visibility:</Text>
               <View style={styles.visibilityContainer}>
                 <TouchableOpacity 
-                  style={[styles.visibilityBtn, task.visibility === 'private' && styles.visibilityActive]} 
-                  onPress={() => updateVisibility(task.task_id, 'private')}
+                  style={[styles.visibilityBtn, !task.visibility && styles.visibilityActive]} 
+                  onPress={() => updateVisibility(task.task_id, false)}
                 >
-                  <Ionicons name="lock-closed" size={18} color={task.visibility === 'private' ? '#fff' : '#94a3b8'} />
-                  <Text style={[styles.visibilityText, task.visibility === 'private' && styles.visibilityTextActive]}>Private</Text>
+                  <Ionicons name="lock-closed" size={18} color={!task.visibility ? '#fff' : '#94a3b8'} />
+                  <Text style={[styles.visibilityText, !task.visibility && styles.visibilityTextActive]}>Private</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                  style={[styles.visibilityBtn, task.visibility === 'friends' && styles.visibilityActive]} 
-                  onPress={() => updateVisibility(task.task_id, 'friends')}
+                  style={[styles.visibilityBtn, task.visibility && styles.visibilityActive]} 
+                  onPress={() => updateVisibility(task.task_id, true)}
                 >
-                  <Ionicons name="people" size={18} color={task.visibility === 'friends' ? '#fff' : '#94a3b8'} />
-                  <Text style={[styles.visibilityText, task.visibility === 'friends' && styles.visibilityTextActive]}>Friends</Text>
+                  <Ionicons name="people" size={18} color={task.visibility ? '#fff' : '#94a3b8'} />
+                  <Text style={[styles.visibilityText, task.visibility && styles.visibilityTextActive]}>Friends</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -307,11 +310,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 30,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#f1f5f9",
-    marginBottom: 20,
+  },
+  date: {
+    fontSize: 16,
+    color: "#94a3b8",
+    fontWeight: "600",
   },
   taskList: {
     flex: 1,
@@ -324,9 +337,9 @@ const styles = StyleSheet.create({
   },
   taskCard: {
     backgroundColor: "#334155",
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 15,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
     borderWidth: 2,
     borderColor: "#475569",
   },
@@ -341,20 +354,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   taskName: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#f1f5f9",
     flex: 1,
   },
   deleteButton: {
-    backgroundColor: "#ef4444",
-    padding: 8,
-    borderRadius: 8,
+    backgroundColor: "#f59e0b",
+    padding: 4,
+    borderRadius: 5,
   },
   taskDescription: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#94a3b8",
-    marginBottom: 15,
+    marginBottom: 10,
   },
   completionRow: {
     flexDirection: "row",
@@ -362,18 +375,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   completionLabel: {
-    fontSize: 16,
+    fontSize: 13,
     color: "#e2e8f0",
-    marginRight: 10,
+    marginRight: 8,
   },
   percentageInput: {
     backgroundColor: "#475569",
-    borderRadius: 8,
-    padding: 8,
-    width: 60,
+    borderRadius: 6,
+    padding: 6,
+    width: 50,
     textAlign: "center",
     color: "#f1f5f9",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
   },
   percentageText: {
@@ -383,42 +396,42 @@ const styles = StyleSheet.create({
   },
   slider: {
     width: "100%",
-    height: 50,
-    marginBottom: 10,
-    transform: [{ scaleY: 2 }],
+    height: 40,
+    marginBottom: 8,
+    transform: [{ scaleY: 1.5 }],
   },
   progressBar: {
-    height: 10,
+    height: 6,
     backgroundColor: "#475569",
-    borderRadius: 5,
+    borderRadius: 3,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%",
     backgroundColor: "#3b82f6",
-    borderRadius: 5,
+    borderRadius: 3,
   },
   remarksLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#e2e8f0",
-    marginTop: 15,
-    marginBottom: 8,
+    marginTop: 10,
+    marginBottom: 6,
     fontWeight: "600",
   },
   remarksInput: {
     backgroundColor: "#475569",
-    borderRadius: 8,
-    padding: 10,
+    borderRadius: 6,
+    padding: 8,
     color: "#f1f5f9",
-    fontSize: 14,
-    minHeight: 60,
+    fontSize: 12,
+    minHeight: 40,
     textAlignVertical: "top",
   },
   visibilityLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#e2e8f0",
-    marginTop: 15,
-    marginBottom: 8,
+    marginTop: 10,
+    marginBottom: 6,
     fontWeight: "600",
   },
   visibilityContainer: {
@@ -430,10 +443,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    padding: 8,
     backgroundColor: '#475569',
-    borderRadius: 8,
-    gap: 6,
+    borderRadius: 6,
+    gap: 4,
   },
   visibilityActive: {
     backgroundColor: '#3b82f6',

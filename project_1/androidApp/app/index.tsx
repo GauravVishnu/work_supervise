@@ -20,16 +20,17 @@ export default function Login() {
   const [captchaInput, setCaptchaInput] = useState("");
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     generateCaptcha();
-    // checkAutoLogin();
+    checkAutoLogin();
   }, []);
 
   const checkAutoLogin = async () => {
     const token = await AsyncStorage.getItem("token");
     if (token) {
-      router.replace("/(tabs)/");
+      router.replace("/home");
     }
   };
 
@@ -60,6 +61,7 @@ export default function Login() {
 
     console.log("🚀 Making API call to:", `${API_URL}/login`);
 
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
@@ -83,6 +85,8 @@ export default function Login() {
     } catch (err: any) {
       console.log("❌ Network Error:", err);
       Alert.alert("Error", err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -145,13 +149,14 @@ export default function Login() {
 
       {/* Button */}
       <Pressable 
-        style={styles.button} 
+        style={[styles.button, loading && styles.buttonDisabled]} 
         onPress={() => {
           console.log("BUTTON PRESSED!");
           handleLogin();
         }}
+        disabled={loading}
       >
-        <Text style={styles.buttonText}>Sign In</Text>
+        <Text style={styles.buttonText}>{loading ? 'Signing in...' : 'Sign In'}</Text>
       </Pressable>
 
       {/* Footer */}
@@ -276,6 +281,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "700",
+  },
+
+  buttonDisabled: {
+    opacity: 0.6,
   },
 
   footerText: {

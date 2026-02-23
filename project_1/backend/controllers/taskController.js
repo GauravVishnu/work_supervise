@@ -11,10 +11,10 @@ const createTask = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO tasks 
-       (user_id, name, description, completion_percentage, visibility, created_by, created_on_client, created_on_server)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+       (user_id, name, description, completion_percentage, visibility, task_date, created_by, created_on_client, created_on_server)
+       VALUES ($1, $2, $3, $4, $5, CURRENT_DATE, $6, NOW(), NOW())
        RETURNING *`,
-      [userId, name, description || "", completionPercentage || 0, visibility || 'friends', "SYS001"]
+      [userId, name, description || "", completionPercentage || 0, visibility !== undefined ? visibility : true, "SYS001"]
     );
 
     res.status(201).json({
@@ -33,7 +33,7 @@ const getTasks = async (req, res) => {
     const userId = req.user.id;
 
     const result = await pool.query(
-      `SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_on_server DESC`,
+      `SELECT * FROM tasks WHERE user_id = $1 AND task_date = CURRENT_DATE ORDER BY created_on_server DESC`,
       [userId]
     );
 

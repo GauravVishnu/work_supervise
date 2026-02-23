@@ -60,7 +60,7 @@ const sendFriendRequest = async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO friends (user_id, friend_user_id, status, created_by, created_on_client, created_on_server)
-       VALUES ($1, $2, 'pending', $3, NOW(), NOW())
+       VALUES ($1, $2, false, $3, NOW(), NOW())
        RETURNING *`,
       [userId, friendUserId, "SYS001"]
     );
@@ -87,7 +87,7 @@ const getFriendRequests = async (req, res) => {
               u.udm_name, u.udm_email
        FROM friends f
        JOIN public.user_details_m u ON f.user_id = u.udm_id
-       WHERE f.friend_user_id = $1 AND f.status = 'pending'
+       WHERE f.friend_user_id = $1 AND f.status = false
        ORDER BY f.created_on_server DESC`,
       [userId]
     );
@@ -109,10 +109,10 @@ const getFriendRequests = async (req, res) => {
 const respondToRequest = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body; // 'accepted' or 'rejected'
+    const { status } = req.body;
     const userId = req.user.id;
 
-    if (!status || !['accepted', 'rejected'].includes(status)) {
+    if (status === undefined || typeof status !== 'boolean') {
       return res.status(400).json({ error: "Valid status required" });
     }
 
@@ -129,7 +129,7 @@ const respondToRequest = async (req, res) => {
     }
 
     res.json({
-      message: `Friend request ${status}`,
+      message: `Friend request ${status ? 'accepted' : 'rejected'}`,
       request: result.rows[0],
     });
 
@@ -158,7 +158,7 @@ const getFriends = async (req, res) => {
            ELSE f.user_id 
          END) = u.udm_id
        WHERE (f.user_id = $1 OR f.friend_user_id = $1) 
-       AND f.status = 'accepted'
+       AND f.status = true
        ORDER BY u.udm_name`,
       [userId]
     );
@@ -185,7 +185,7 @@ const getFriendTasks = async (req, res) => {
       `SELECT * FROM friends 
        WHERE ((user_id = $1 AND friend_user_id = $2) 
        OR (user_id = $2 AND friend_user_id = $1))
-       AND status = 'accepted'`,
+       AND status = true`,
       [userId, friendId]
     );
 
@@ -197,14 +197,9 @@ const getFriendTasks = async (req, res) => {
     const result = await pool.query(
       `SELECT t.* FROM tasks t
        WHERE t.user_id = $1 
-       AND (t.visibility = 'friends' 
-            OR EXISTS (
-              SELECT 1 FROM task_shares ts 
-              WHERE ts.task_id = t.task_id 
-              AND ts.shared_with_user_id = $2
-            ))
+       AND t.visibility = true
        ORDER BY t.created_on_server DESC`,
-      [friendId, userId]
+      [friendId]
     );
 
     res.json({

@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, Alert, RefreshControl, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { API_URL } from './config';
 
 export default function Friends() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('search');
+  const params = useLocalSearchParams();
+  const [activeTab, setActiveTab] = useState(params.tab?.toString() || 'search');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    console.log('Params received:', params);
+    if (params.tab) {
+      console.log('Setting tab to:', params.tab);
+      setActiveTab(params.tab.toString());
+    }
+  }, [params.tab]);
 
   useEffect(() => {
     loadData();
@@ -181,10 +190,10 @@ export default function Friends() {
                 <Text style={styles.email}>{item.udm_email}</Text>
               </View>
               <View style={styles.btnGroup}>
-                <TouchableOpacity style={styles.acceptBtn} onPress={() => respondRequest(item.friend_id, 'accepted')}>
+                <TouchableOpacity style={styles.acceptBtn} onPress={() => respondRequest(item.friend_id, true)}>
                   <Text style={styles.btnText}>Accept</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.rejectBtn} onPress={() => respondRequest(item.friend_id, 'rejected')}>
+                <TouchableOpacity style={styles.rejectBtn} onPress={() => respondRequest(item.friend_id, false)}>
                   <Text style={styles.btnText}>Reject</Text>
                 </TouchableOpacity>
               </View>

@@ -4,29 +4,27 @@
     "slug": "androidApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
-
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#D32F2F"
     },
-
-    "assetBundlePatterns": ["**/*"],
-
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "usesCleartextTraffic": true,
-
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#D32F2F"
-      },
-
       "statusBar": {
         "backgroundColor": "#D32F2F",
         "barStyle": "light-content"
+      },
+      "package": "com.vgraushni.androidApp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8bd311cb-63ca-480b-bbb2-dfc250ef189c"
       }
     }
   }

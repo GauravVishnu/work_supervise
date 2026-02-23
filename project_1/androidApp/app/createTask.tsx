@@ -9,7 +9,7 @@ export default function CreateTask() {
   const router = useRouter();
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
-  const [visibility, setVisibility] = useState("friends");
+  const [visibility, setVisibility] = useState(true);
   const [submitted, setSubmitted] = useState(false);
 
   const handleCreateTask = async () => {
@@ -96,18 +96,18 @@ export default function CreateTask() {
       <Text style={styles.label}>Visibility</Text>
       <View style={styles.visibilityContainer}>
         <TouchableOpacity 
-          style={[styles.visibilityBtn, visibility === 'private' && styles.visibilityActive]} 
-          onPress={() => setVisibility('private')}
+          style={[styles.visibilityBtn, !visibility && styles.visibilityActive]} 
+          onPress={() => setVisibility(false)}
         >
-          <Ionicons name="lock-closed" size={20} color={visibility === 'private' ? '#fff' : '#94a3b8'} />
-          <Text style={[styles.visibilityText, visibility === 'private' && styles.visibilityTextActive]}>Private</Text>
+          <Ionicons name="lock-closed" size={20} color={!visibility ? '#fff' : '#94a3b8'} />
+          <Text style={[styles.visibilityText, !visibility && styles.visibilityTextActive]}>Private</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.visibilityBtn, visibility === 'friends' && styles.visibilityActive]} 
-          onPress={() => setVisibility('friends')}
+          style={[styles.visibilityBtn, visibility && styles.visibilityActive]} 
+          onPress={() => setVisibility(true)}
         >
-          <Ionicons name="people" size={20} color={visibility === 'friends' ? '#fff' : '#94a3b8'} />
-          <Text style={[styles.visibilityText, visibility === 'friends' && styles.visibilityTextActive]}>Friends</Text>
+          <Ionicons name="people" size={20} color={visibility ? '#fff' : '#94a3b8'} />
+          <Text style={[styles.visibilityText, visibility && styles.visibilityTextActive]}>Friends</Text>
         </TouchableOpacity>
       </View>
 

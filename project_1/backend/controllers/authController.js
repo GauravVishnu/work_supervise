@@ -19,7 +19,7 @@ const register = async (req, res) => {
       return res.status(400).json({ error: "Email already registered" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 8);
 
     const result = await pool.query(
       `INSERT INTO public.user_details_m
