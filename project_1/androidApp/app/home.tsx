@@ -13,7 +13,6 @@ export default function Home() {
   }, []);
 
   const handleLogout = async () => {
-    console.log("Logout pressed");
     socketService.disconnect();
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("user");

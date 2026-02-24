@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { API_URL } from './config';
 import socketService from './socketService';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function Conversations() {
   const [friends, setFriends] = useState([]);
@@ -74,22 +75,24 @@ export default function Conversations() {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backButton}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Select Friend to Chat</Text>
-      </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={styles.backButton}>←</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Select Friend to Chat</Text>
+        </View>
 
-      <FlatList
-        data={friends}
-        renderItem={renderFriend}
-        keyExtractor={(item) => item.udm_id.toString()}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); fetchFriends(); }} />}
-        ListEmptyComponent={<Text style={styles.emptyText}>No friends yet. Add friends to start chatting!</Text>}
-      />
-    </View>
+        <FlatList
+          data={friends}
+          renderItem={renderFriend}
+          keyExtractor={(item) => item.udm_id.toString()}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); fetchFriends(); }} />}
+          ListEmptyComponent={<Text style={styles.emptyText}>No friends yet. Add friends to start chatting!</Text>}
+        />
+      </View>
+    </GestureHandlerRootView>
   );
 }
 

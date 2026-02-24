@@ -41,25 +41,15 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
-    console.log("=== Login clicked ===");
-    console.log("Form data:", { email, password, captchaInput });
-    console.log("Captcha: input =", captchaInput, "expected =", num1 + num2);
-
     if (!email || !password) {
-      console.log("❌ FAILED: Empty fields");
       Alert.alert("Error", "Please enter email and password");
       return;
     }
-    console.log("✅ PASSED: Fields filled");
 
     if (Number(captchaInput) !== num1 + num2) {
-      console.log("❌ FAILED: Incorrect captcha");
       Alert.alert("Error", "Incorrect captcha");
       return;
     }
-    console.log("✅ PASSED: Captcha correct");
-
-    console.log("🚀 Making API call to:", `${API_URL}/login`);
 
     setLoading(true);
     try {
@@ -69,21 +59,16 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("📡 Response status:", response.status);
       const data = await response.json();
-      console.log("📦 Response data:", data);
 
       if (response.ok) {
-        console.log("✅ Login successful");
         await AsyncStorage.setItem("token", data.token);
         await AsyncStorage.setItem("user", JSON.stringify(data.user));
         router.push("/home");
       } else {
-        console.log("❌ Login failed:", data.error);
         Alert.alert("Error", data.error || "Login failed");
       }
     } catch (err: any) {
-      console.log("❌ Network Error:", err);
       Alert.alert("Error", err.message);
     } finally {
       setLoading(false);
@@ -151,7 +136,6 @@ export default function Login() {
       <Pressable 
         style={[styles.button, loading && styles.buttonDisabled]} 
         onPress={() => {
-          console.log("BUTTON PRESSED!");
           handleLogin();
         }}
         disabled={loading}

@@ -36,7 +36,7 @@ const sendFriendRequest = async (req, res) => {
     const { friendUserId } = req.body;
     const userId = req.user.id;
 
-    console.log('Send friend request:', { userId, friendUserId, body: req.body });
+
 
     if (!friendUserId) {
       return res.status(400).json({ error: "Friend user ID required" });
@@ -80,8 +80,6 @@ const sendFriendRequest = async (req, res) => {
 const getFriendRequests = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log('Getting friend requests for user:', userId);
-
     const result = await pool.query(
       `SELECT f.friend_id, f.user_id, f.status, f.created_on_server,
               u.udm_name, u.udm_email
@@ -91,8 +89,6 @@ const getFriendRequests = async (req, res) => {
        ORDER BY f.created_on_server DESC`,
       [userId]
     );
-
-    console.log('Found requests:', result.rows.length);
 
     res.json({
       message: "Friend requests fetched",
